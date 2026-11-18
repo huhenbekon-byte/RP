@@ -16,3 +16,9 @@ bans.json
 Thumbs.db
 __pycache__/
 *.tmp
+
+# Android installer build
+installer/.gradle/
+installer/build/
+installer/app/build/
+installer/local.properties

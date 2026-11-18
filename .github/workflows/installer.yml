@@ -1,0 +1,51 @@
+name: Build installer APK
+
+on:
+  push:
+    paths:
+      - 'installer/**'
+      - '.github/workflows/installer.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.11.1'
+
+      - name: Build APK
+        working-directory: installer
+        run: gradle assembleDebug --no-daemon --stacktrace
+
+      - name: Rename APK
+        run: cp installer/app/build/outputs/apk/debug/app-debug.apk CR-Installer.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CR-Installer
+          path: CR-Installer.apk
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: installer-v${{ github.run_number }}
+          name: CR Установщик v${{ github.run_number }}
+          target_commitish: ${{ github.sha }}
+          prerelease: true
+          files: CR-Installer.apk
+          body: |
+            APK установщика мода для GTA San Andreas (Android).
+            Внутри нет файлов игры: она ставится из Google Play, мод — из вашего .zip архива.
+            На Android 11+ нужен Shizuku.
