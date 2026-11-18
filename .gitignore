@@ -1,0 +1,18 @@
+# Compiled gamemode binaries
+*.amx
+*.dll
+*.exe
+
+# Database & runtime files
+*.db
+*.db-journal
+*.log
+log.txt
+server_latest.log
+bans.json
+
+# Cache & OS files
+.DS_Store
+Thumbs.db
+__pycache__/
+*.tmp
