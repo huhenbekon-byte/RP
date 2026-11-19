@@ -213,3 +213,17 @@ CREATE TABLE `store_robberies` (
   `posz` FLOAT NOT NULL,
   `last_robbed` INT NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ---------------------------------------------------------------------------
+-- Table: ww_players (Wild West mode: bounty, wanted, honor, hunting loot)
+-- ---------------------------------------------------------------------------
+DROP TABLE IF EXISTS `ww_players`;
+CREATE TABLE `ww_players` (
+  `char_id` INT PRIMARY KEY,
+  `bounty` INT DEFAULT 0,
+  `wanted` INT DEFAULT 0,
+  `honor` INT DEFAULT 0,
+  `pelts` INT DEFAULT 0,
+  `meat` INT DEFAULT 0,
+  `claimed` INT DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

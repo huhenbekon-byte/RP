@@ -474,6 +474,7 @@ public OnCharacterLoaded(playerid)
 
 	gPlayerData[playerid][pLoggedIn] = true;
 	gPlayerData[playerid][pSpawned] = false;
+	WW_LoadPlayer(playerid);
 
 	// PENTING: pInjured/pInjuredTime tidak disimpan permanen ke DB.
 	// Status pingsan adalah state sesi — timer penyembuh (OnEmergencyHospitalRespawn)

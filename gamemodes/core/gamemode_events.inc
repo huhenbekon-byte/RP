@@ -53,6 +53,7 @@ public OnPlayerDisconnect(playerid, reason)
 		if (gPlayerData[playerid][pCallState] != 0) ProcessHangup(playerid);
 		if (gJobActive[playerid]) ProcessJobQuit(playerid);
 		ProcessRentalDisconnect(playerid);
+		WW_OnPlayerDisconnect(playerid);
 		SavePlayerOnDisconnect(playerid);
 	}
 	ClearHospitalTimer(playerid);
@@ -111,6 +112,9 @@ public OnPlayerDeath(playerid, killerid, WEAPON:reason)
 	if (!AC_ValidateDeath(playerid, killerid, reason)) return 0;
 
 	gPlayerData[playerid][pDeaths]++;
+
+	// Дикий Запад: дуэли, награды за голову, розыск
+	WW_OnPlayerDeath(playerid, killerid);
 
 	if (killerid != INVALID_PLAYER_ID && killerid != playerid && IsPlayerConnected(killerid)) {
 		gPlayerData[killerid][pKills]++;
@@ -218,6 +222,7 @@ public OnPlayerWeaponShot(playerid, WEAPON:weaponid, BULLET_HIT_TYPE:hittype, hi
 public OnPlayerGiveDamage(playerid, damagedid, Float:amount, WEAPON:weaponid, bodypart)
 {
 	if (!AC_ValidateDamage(playerid, damagedid, amount, weaponid, bodypart)) return 0;
+	WW_OnPlayerGiveDamage(playerid, damagedid, amount, weaponid);
 	return 1;
 }
 
@@ -321,13 +326,17 @@ public RP_Tick()
 		UpdatePlayerZoneHUD(i);
 	}
 	UpdateVehicleFuelLoop();
+	WW_Tick();
 	return 1;
 }
 
 public RP_SaveTick()
 {
 	for (new i = 0; i < MAX_PLAYERS; i++) {
-		if (IsPlayerConnected(i) && gPlayerData[i][pLoggedIn]) DB_SavePlayerData(i);
+		if (IsPlayerConnected(i) && gPlayerData[i][pLoggedIn]) {
+			DB_SavePlayerData(i);
+			WW_SavePlayer(i);
+		}
 	}
 	for (new i = 0; i < MAX_OWNED_VEHICLES; i++) {
 		if (gVehicleData[i][vUsed]) DB_SaveVehicle(i);

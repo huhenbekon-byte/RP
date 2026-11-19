@@ -71,6 +71,7 @@
 #include "gameplay/illegal_activities.inc"
 #include "gameplay/phone.inc"
 #include "gameplay/player_stats.inc"
+#include "gameplay/wild_west.inc"      // режим «Дикий Запад»
 
 // 6. Oldschool Dialog UI & Menus
 #include "ui/inventory_dialog.inc"
@@ -138,6 +139,7 @@ public OnGameModeInit()
 	FastFood_Init();
 	Accessories_Init();
 	TaxiMeter_Init();
+	WildWest_Init();
 
 	// default class spawn
 	AddPlayerClass(0, SPAWN_X, SPAWN_Y, SPAWN_Z, SPAWN_A, WEAPON_FIST, 0, WEAPON_FIST, 0, WEAPON_FIST, 0);
@@ -193,6 +195,7 @@ public OnGameModeExit()
 	for (new i = 0; i < MAX_PLAYERS; i++) {
 		if (IsPlayerConnected(i) && gPlayerData[i][pLoggedIn]) {
 			DB_SavePlayerData(i);
+			WW_SavePlayer(i);
 			TextdrawDestroyAll(i);
 		}
 	}
